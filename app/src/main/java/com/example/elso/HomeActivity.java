@@ -102,18 +102,22 @@ public class HomeActivity extends AppCompatActivity {
 
         // Create the ArrayList of Sports objects with the titles and
         // information about each sport.
-        for (int i = 0; i < itemsList.length; i++) {
-            mItems.add(new Item(
-                    itemsList[i],
-                    itemsInfo[i],
-                    itemsPrice[i],
-                    itemRate.getFloat(i, 0),
-                    itemsImageResources.getResourceId(i, 0)));
-        }
+        mItems.get().addOnCompleteListener(kollekson -> {
+            if (kollekson.getResult().size() == 0) {
+                for (int i = 0; i < itemsList.length; i++) {
+                    mItems.add(new Item(
+                            itemsList[i],
+                            itemsInfo[i],
+                            itemsPrice[i],
+                            itemRate.getFloat(i, 0),
+                            itemsImageResources.getResourceId(i, 0)));
+                }
+            }
+            queryData();
+        });
 
         // Recycle the typed array.
         //itemsImageResources.recycle();
-        queryData();
     }
     private void queryData() {
         mItemsData.clear();
@@ -122,9 +126,16 @@ public class HomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for (QueryDocumentSnapshot document:
-                         task.getResult()) {
-                        document.getData();
+                            task.getResult()) {
+                        mItemsData.add(new Item(
+                                document.getString("name"),
+                                document.getString("info"),
+                                document.getString("price"),
+                                document.getDouble("ratedInfo").floatValue(),
+                                document.getLong("imageResource").intValue()
+                        ));
                     }
+                    mAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -166,12 +177,12 @@ public class HomeActivity extends AppCompatActivity {
             return true;
         } else if (itemId == R.id.settings_button) {
             Log.d(LOG_TAG, "Setting clicked!");
-                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-                builder.setTitle("Beállítások")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {}
-                        })
-                        .show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            builder.setTitle("Beállítások")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {}
+                    })
+                    .show();
             return true;
         } else if (itemId == R.id.cart) {
             Log.d(LOG_TAG, "Cart clicked!");
