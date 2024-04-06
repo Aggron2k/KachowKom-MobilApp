@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1013257016373",
+    "project_id": "kachowkom",
+    "storage_bucket": "kachowkom.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013257016373:android:4ba9fd9928ae0b41a10d7c",
+        "android_client_info": {
+          "package_name": "com.example.elso"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1013257016373-rdmkrfjqdek14lcpm1kprath2tb2aq2v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.elso",
+            "certificate_hash": "96502fc3e1a54e4463770bdfa5d9c4436b6acb8e"
+          }
+        },
+        {
+          "client_id": "1013257016373-2ghe3tgp7r9l0afkr86b6914nb7mb4ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_Cf6TUZRZLESFhuGeo5R5AfmmAI_5EUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1013257016373-2ghe3tgp7r9l0afkr86b6914nb7mb4ta.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
