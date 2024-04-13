@@ -195,13 +195,8 @@ public class HomeActivity extends AppCompatActivity {
                     .show();
             return true;
         } else if (itemId == R.id.profil_button){
-            Log.d(LOG_TAG, "Profil clicked!");
-            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-            builder.setTitle("PROFIL")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {}
-                    })
-                    .show();
+            Intent profile =  new Intent(this, ProfileActivity.class);
+            startActivity(profile);
             return true;
         } else if (itemId == R.id.new_add){
             Intent ujcsomag =  new Intent(this, AddNewActivity.class);
