@@ -56,13 +56,28 @@
             android:padding="8dp"
             android:textColor="@color/red" />
 
-        <Button
-            android:id="@+id/edit"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/price"
-            android:layout_centerHorizontal="true"
-            android:text="Kosárba" />
+            android:layout_below="@id/subTitle"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+            <Button
+                android:id="@+id/edit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Edit"
+                />
+            <Button
+                android:id="@+id/delete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Delete"
+                />
+
+        </LinearLayout>
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -91,4 +91,5 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="pegaSUS">Bármelyik csomag aktiválásval elfogadod hogy lehallgathatunk téged a PegaSUS programmal!</string>
+    <string name="title_activity_add_new">activity_add_new</string>
 </resources>

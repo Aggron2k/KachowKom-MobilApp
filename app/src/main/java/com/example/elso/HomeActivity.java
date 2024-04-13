@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
@@ -121,7 +122,7 @@ public class HomeActivity extends AppCompatActivity {
     }
     private void queryData() {
         mItemsData.clear();
-        mItems.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        mItems.orderBy("name").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
@@ -192,6 +193,19 @@ public class HomeActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {}
                     })
                     .show();
+            return true;
+        } else if (itemId == R.id.profil_button){
+            Log.d(LOG_TAG, "Profil clicked!");
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+            builder.setTitle("PROFIL")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {}
+                    })
+                    .show();
+            return true;
+        } else if (itemId == R.id.new_add){
+            Intent ujcsomag =  new Intent(this, AddNewActivity.class);
+            startActivity(ujcsomag);
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -24,9 +24,22 @@
         android:orderInCategory="2">
     </item>
     <item
+        android:id="@+id/new_add"
+        app:showAsAction="never"
+        android:title="Új csomag hozzáadása"
+        android:orderInCategory="1">
+    </item>
+    <item
+        android:id="@+id/profil_button"
+        app:showAsAction="never"
+        android:title="Profil"
+        android:orderInCategory="1">
+    </item>
+    <item
         android:id="@+id/settings_button"
         app:showAsAction="never"
         android:title="Beállítások"
         android:orderInCategory="1">
     </item>
+
 </menu>
