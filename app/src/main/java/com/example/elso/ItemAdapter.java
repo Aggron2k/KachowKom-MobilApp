@@ -1,6 +1,8 @@
 package com.example.elso;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +13,28 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> implements Filterable {
 
+
+
     private ArrayList<Item> mItemsData;
     private ArrayList<Item> mItemsDataAll;
     private Context mContext;
     private int lastPos = -1;
+    private FirebaseFirestore mFirestore;
 
     ItemAdapter(Context context, ArrayList<Item> itemsData){
         this.mItemsData = itemsData;
@@ -45,11 +55,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
 
         holder.bindTo(currentItem);
 
+
         if(holder.getAdapterPosition() > lastPos){
             Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_in_row);
             holder.itemView.startAnimation(animation);
             lastPos = holder.getAdapterPosition();
         }
+
+
     }
 
     @Override
@@ -100,6 +113,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
         private ImageView mItemImage;
         private RatingBar mRatingBar;
 
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -109,12 +123,41 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
             mItemImage = itemView.findViewById(R.id.itemImage);
             mRatingBar = itemView.findViewById(R.id.ratingBar);
 
+            mFirestore = FirebaseFirestore.getInstance();
+
+            String title = mTitleText.getText().toString();
+            String info = mInfoText.getText().toString();
+            String price = mPriceText.getText().toString();
+            float ratedInfo = mRatingBar.getRating();
+            int imageResource = mItemImage.getImageAlpha();
+
             itemView.findViewById(R.id.activate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO: Megcsinálni ezt bátyya addolni a carthoz vagod csotany
-                    ((HomeActivity)mContext).updateAlertIcon();
+                    if (mFirestore != null) {
+                        // Felhasználó UID-jének lekérése
+                        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+                        // Felhasználó által választott csomag dokumentum létrehozása a Firestore-ban
+                        //TODO: SZARUL VISZI FEL
+                        mFirestore.collection("userPackages").document(userUid).set(new Item(title, info, price, ratedInfo, imageResource))
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // Sikeres hozzáadás esetén megjeleníthetsz egy üzenetet a felhasználónak
+                                        Toast.makeText(mContext, "Csomag sikeresen kiválasztva!", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Hiba esetén megjeleníthetsz egy hibaüzenetet a felhasználónak
+                                        Toast.makeText(mContext, "Hiba történt a csomag kiválasztása közben.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    } else {
+                        Toast.makeText(mContext, "A Firestore nincs inicializálva.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }

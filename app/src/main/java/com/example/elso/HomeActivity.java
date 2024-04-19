@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -88,6 +89,7 @@ public class HomeActivity extends AppCompatActivity {
         mFirestore = FirebaseFirestore.getInstance();
         mItems = mFirestore.collection("Items");
         initializeData();
+
     }
     private void initializeData() {
         // Get the resources from the XML file.
