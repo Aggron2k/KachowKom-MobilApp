@@ -13,8 +13,7 @@
         android:id="@+id/cart"
         app:showAsAction="always"
         android:title="Cart"
-        android:icon="@drawable/cart"
-        app:actionLayout="@layout/custom_menu_item"
+        android:icon="@drawable/activate"
         >
     </item>
     <item

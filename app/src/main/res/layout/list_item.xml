@@ -57,12 +57,12 @@
             android:textColor="@color/red" />
 
         <Button
-            android:id="@+id/edit"
+            android:id="@+id/activate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/price"
             android:layout_centerHorizontal="true"
-            android:text="Kosárba" />
+            android:text="Aktiválás" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

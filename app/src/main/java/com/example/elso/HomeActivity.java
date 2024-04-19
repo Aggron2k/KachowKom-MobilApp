@@ -206,23 +206,6 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        final MenuItem alertMenuItem = menu.findItem(R.id.cart);
-        FrameLayout rootView = (FrameLayout) alertMenuItem.getActionView();
-
-        redCricle = (FrameLayout) rootView.findViewById(R.id.view_alert_red_circle);
-        contentTextView = (TextView) rootView.findViewById(R.id.view_alert_count_textview);
-
-        rootView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onOptionsItemSelected(alertMenuItem);
-            }
-        });
-        return super.onPrepareOptionsMenu(menu);
-    }
-
     public void updateAlertIcon(){
         cartItems = (cartItems+1);
         if (0 < cartItems){

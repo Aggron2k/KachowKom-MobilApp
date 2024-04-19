@@ -109,7 +109,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
             mItemImage = itemView.findViewById(R.id.itemImage);
             mRatingBar = itemView.findViewById(R.id.ratingBar);
 
-            itemView.findViewById(R.id.edit).setOnClickListener(new View.OnClickListener() {
+            itemView.findViewById(R.id.activate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //TODO: Megcsinálni ezt bátyya addolni a carthoz vagod csotany
