@@ -62,13 +62,7 @@
             android:layout_below="@id/subTitle"
             android:orientation="horizontal"
             android:gravity="center_horizontal">
-            <Button
-                android:id="@+id/edit_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Edit"
-                />
+
             <Button
                 android:id="@+id/delete_btn"
                 android:layout_width="wrap_content"

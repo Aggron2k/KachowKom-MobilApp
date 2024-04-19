@@ -113,7 +113,7 @@ public class AddNewActivity extends AppCompatActivity {
                     float mrate = Float.parseFloat(ratedInfo.getText().toString());
 
                     Log.d("Activity", userId);
-                    Item itemek = new Item(mname,mdesc,mprice,mrate,0);
+                    Item itemek = new Item(mname,mdesc,mprice,mrate,2131230980);
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {

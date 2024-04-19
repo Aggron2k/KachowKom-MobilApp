@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class RegisterActivity extends AppCompatActivity {
     private static final String LOG_TAG = RegisterActivity.class.getName();
     private static final String PREF_KEY = MainActivity.class.getPackage().toString();
-    private static final int SECRET_KEY = 99;
 
 
     EditText usernameEditText;
@@ -39,8 +38,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        //Bundle bundle = getIntent().getExtras();
-        //bundle.getInt("SECRET_KEY");
         int secret_key = getIntent().getIntExtra("SECRET_KEY",0);
 
         if (secret_key != 99){
@@ -57,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         String userName = preferences.getString("userName", "");
         String password = preferences.getString("password", "");
 
-        usernameEditText.setText(userName);
+        userEmialEditText.setText(userName);
         passwordEditText.setText(password);
         passwordReEditText.setText(password);
 

@@ -23,22 +23,27 @@
     </string-array>
 
     <string-array name="item_desc">
-        <item>MUTUKA HAHA FOGYKOSXDDD</item>
-        <item>Szigoru a test</item>
-        <item>VILLÁM XD SEBBESÉG</item>
+        <item>
+            NET: 20 MB,
+            HÍVAS: 40 Másodperc,
+            DESC: Nehogy mar jó legyen neked, ennyi pénzért örülj ha levegőt kapsz :o
+        </item>
+        <item>
+            NET: 1 GB,
+            HÍVÁS: 1 óra,
+            DESC: Ezzel kinda elvagy, de kimondta hogy többet kapsz nehogymar D:
+        </item>
+        <item>
+            NET: 420GB,
+            HÍVÁS: 5 ÉV,
+            DESC: ADJ PÉZ, MI ADUNK IGEN AAH PENZ IDE YUHU
+        </item>
     </string-array>
 
     <array name="item_rates">
-        <item>3.5</item>
-        <item>5</item>
-        <item>4</item>
-        <item>1.5</item>
-        <item>5</item>
+        <item>1</item>
         <item>3</item>
-        <item>4.5</item>
-        <item>4</item>
         <item>5</item>
-        <item>2.5</item>
     </array>
 
     <array name="item_images">

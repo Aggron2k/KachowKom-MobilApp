@@ -122,7 +122,7 @@ public class HomeActivity extends AppCompatActivity {
     }
     private void queryData() {
         mItemsData.clear();
-        mItems.orderBy("name").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        mItems.orderBy("ratedInfo").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
