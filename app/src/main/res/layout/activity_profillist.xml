@@ -23,7 +23,7 @@
         tools:ignore="MissingConstraints">
 
         <TextView
-            android:id="@+id/add_new"
+            android:id="@+id/activasdecsomag"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
@@ -42,7 +42,7 @@
             android:scrollbars="vertical"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints"
-            android:layout_below="@id/add_new"
+            android:layout_below="@id/activasdecsomag"
             tools:layout_editor_absoluteX="-1dp" />
 
 

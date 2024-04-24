@@ -35,7 +35,7 @@ public class ActivePackageActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerViewActivated); // Átnevezve a RecyclerView id-je
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(ActivePackageActivity.this));
 
         activePackagesList = new ArrayList<>();
         adapter = new ItemAdapter(this, activePackagesList);
