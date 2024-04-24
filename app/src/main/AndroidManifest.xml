@@ -19,6 +19,10 @@
             android:label="@string/title_activity_add_new"
             android:theme="@style/Theme.Elso" />
         <activity
+            android:name=".ActivePackageActivity"
+            android:exported="false"
+            />
+        <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity

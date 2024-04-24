@@ -188,13 +188,8 @@ public class HomeActivity extends AppCompatActivity {
                     .show();
             return true;
         } else if (itemId == R.id.cart) {
-            Log.d(LOG_TAG, "Cart clicked!");
-            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-            builder.setTitle("CART")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {}
-                    })
-                    .show();
+            Intent profileActive =  new Intent(this, ActivePackageActivity.class);
+            startActivity(profileActive);
             return true;
         } else if (itemId == R.id.profil_button){
             Intent profile =  new Intent(this, ProfileActivity.class);
