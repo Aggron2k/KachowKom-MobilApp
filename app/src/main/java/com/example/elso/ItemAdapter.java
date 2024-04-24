@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -106,57 +107,59 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
         }
     };
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mTitleText;
         private TextView mInfoText;
         private TextView mPriceText;
         private ImageView mItemImage;
         private RatingBar mRatingBar;
-
+        private Button mActivateButton;
+        private FirebaseFirestore mFirestore;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            // Firestore objektum inicializálása
+            mFirestore = FirebaseFirestore.getInstance(); // Firestore objektum inicializálása
 
             mTitleText = itemView.findViewById(R.id.itemTitle);
             mInfoText = itemView.findViewById(R.id.subTitle);
             mPriceText = itemView.findViewById(R.id.price);
             mItemImage = itemView.findViewById(R.id.itemImage);
             mRatingBar = itemView.findViewById(R.id.ratingBar);
+            mActivateButton = itemView.findViewById(R.id.activate);
 
-            mFirestore = FirebaseFirestore.getInstance();
-
-            String title = mTitleText.getText().toString();
-            String info = mInfoText.getText().toString();
-            String price = mPriceText.getText().toString();
-            float ratedInfo = mRatingBar.getRating();
-            int imageResource = mItemImage.getImageAlpha();
-
-            itemView.findViewById(R.id.activate).setOnClickListener(new View.OnClickListener() {
+            mActivateButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mFirestore != null) {
-                        // Felhasználó UID-jének lekérése
-                        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Item currentItem = mItemsData.get(position);
+                        String title = currentItem.getName();
+                        String info = currentItem.getInfo();
+                        String price = currentItem.getPrice();
+                        float ratedInfo = currentItem.getRatedInfo();
+                        int imageResource = currentItem.getImageResource();
 
-                        // Felhasználó által választott csomag dokumentum létrehozása a Firestore-ban
-                        //TODO: SZARUL VISZI FEL
-                        mFirestore.collection("userPackages").document(userUid).set(new Item(title, info, price, ratedInfo, imageResource))
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        // Sikeres hozzáadás esetén megjeleníthetsz egy üzenetet a felhasználónak
-                                        Toast.makeText(mContext, "Csomag sikeresen kiválasztva!", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        // Hiba esetén megjeleníthetsz egy hibaüzenetet a felhasználónak
-                                        Toast.makeText(mContext, "Hiba történt a csomag kiválasztása közben.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    } else {
-                        Toast.makeText(mContext, "A Firestore nincs inicializálva.", Toast.LENGTH_SHORT).show();
+                        if (mFirestore != null) {
+                            String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                            mFirestore.collection("userPackages").document(userUid).set(new Item(title, info, price, ratedInfo, imageResource))
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(mContext, "Csomag sikeresen kiválasztva!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(mContext, "Hiba történt a csomag kiválasztása közben.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } else {
+                            Toast.makeText(mContext, "A Firestore nincs inicializálva.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
@@ -166,12 +169,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
             mTitleText.setText(currentItem.getName());
             mInfoText.setText(currentItem.getInfo());
             mPriceText.setText(currentItem.getPrice());
-
             mRatingBar.setRating(currentItem.getRatedInfo());
-
             Glide.with(mContext).load(currentItem.getImageResource()).into(mItemImage);
         }
-    };
-}
+    }
+
+};
 
 
