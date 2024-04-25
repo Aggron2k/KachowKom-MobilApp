@@ -62,6 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/price"
             android:layout_centerHorizontal="true"
+            android:background="#F43636"
             android:text="Aktiválás" />
 
     </RelativeLayout>

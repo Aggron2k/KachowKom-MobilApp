@@ -101,6 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/rate"
             android:gravity="center"
+            android:background="#F43636"
             android:text="Hozzáad"
             />
 

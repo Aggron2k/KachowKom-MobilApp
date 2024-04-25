@@ -100,6 +100,7 @@
             android:layout_height="wrap_content"
             android:text="Felhasználó törlése!"
             android:layout_below="@id/warning"
+            android:background="#F43636"
             android:layout_centerHorizontal="true"/>
 
 

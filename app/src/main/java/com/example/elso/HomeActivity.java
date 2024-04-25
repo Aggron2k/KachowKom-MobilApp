@@ -181,7 +181,7 @@ public class HomeActivity extends AppCompatActivity {
         } else if (itemId == R.id.settings_button) {
             Log.d(LOG_TAG, "Setting clicked!");
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-            builder.setTitle("Beállítások")
+            builder.setTitle("Beállítások (Az nincs xD)")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {}
                     })
