@@ -76,10 +76,12 @@ public class ActivePackageActivity extends AppCompatActivity {
                                 adapter.notifyDataSetChanged();
                             } else {
                                 // A dokumentum nem létezik
+                                Toast.makeText(ActivePackageActivity.this, "Nem található csomag a felhasználóhoz.", Toast.LENGTH_SHORT).show();
                                 //Log.d(TAG, "Nem található csomag a felhasználóhoz.");
                             }
                         } else {
                             // Hiba történt a Firestore lekérdezés közben
+                            Toast.makeText(ActivePackageActivity.this, "Hiba történt a csomagok betöltése közben.", Toast.LENGTH_SHORT).show();
                             //Log.d(TAG, "Hiba történt a csomagok betöltése közben.", task.getException());
                         }
                     }

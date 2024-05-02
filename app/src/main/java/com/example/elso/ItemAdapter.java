@@ -144,6 +144,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
             mActivateButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.anotheranim);
+                    v.startAnimation(animation);
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         Item currentItem = mItemsData.get(position);
