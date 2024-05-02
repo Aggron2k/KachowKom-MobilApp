@@ -120,9 +120,12 @@ public class AddNewActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             db.collection("Items").document(Id).set(itemek).addOnSuccessListener(new OnSuccessListener<Void>() {
+
                                 @SuppressLint("MissingPermission")
                                 @Override
                                 public void onSuccess(Void unused) {
+                                    Toast.makeText(AddNewActivity.this, "Jelentkezz ki, meg be és látszodni fog! <3", Toast.LENGTH_SHORT).show();
+
                                     Log.d("Activity", "Sikeresen hozzáadva");
 
                                     AlertDialog.Builder builder = new AlertDialog.Builder(AddNewActivity.this);
