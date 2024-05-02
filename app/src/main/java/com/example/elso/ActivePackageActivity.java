@@ -55,6 +55,8 @@ public class ActivePackageActivity extends AppCompatActivity {
 
     private void loadActivePackages() {
         firestore.collection("userPackages")
+                //.where(currentUser)
+                //TODO: ITT WHERE?
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

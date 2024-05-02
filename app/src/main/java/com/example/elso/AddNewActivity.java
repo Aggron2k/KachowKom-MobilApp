@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,6 +34,7 @@ import com.google.firebase.firestore.auth.User;
 import java.util.UUID;
 
 public class AddNewActivity extends AppCompatActivity {
+
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private CollectionReference items;
@@ -118,6 +120,7 @@ public class AddNewActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             db.collection("Items").document(Id).set(itemek).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @SuppressLint("MissingPermission")
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Log.d("Activity", "Sikeresen hozzáadva");
@@ -128,6 +131,8 @@ public class AddNewActivity extends AppCompatActivity {
                                                 public void onClick(DialogInterface dialog, int which) {}
                                             })
                                             .show();
+
+
 
                                     runOnUiThread(new Runnable() {
                                         @Override

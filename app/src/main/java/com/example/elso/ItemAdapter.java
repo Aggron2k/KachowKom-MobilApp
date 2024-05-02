@@ -1,8 +1,14 @@
 package com.example.elso;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
+
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -29,6 +39,7 @@ import java.util.ArrayList;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> implements Filterable {
 
+    private static final int MY_NOTIFICATION_ID = 0;
 
 
     private ArrayList<Item> mItemsData;
@@ -149,7 +160,23 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Toast.makeText(mContext, "Csomag sikeresen kiválasztva!", Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(mContext, "Csomag sikeresen kiválasztva!", Toast.LENGTH_SHORT).show();
+
+                                            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+                                                Toast.makeText(mContext, "Nem volt engeély", Toast.LENGTH_SHORT).show();
+
+                                                ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.INTERNET}, MY_NOTIFICATION_ID);
+                                            } else {
+                                                Toast.makeText(mContext, "Van engeély", Toast.LENGTH_SHORT).show();
+                                                NotificationCompat.Builder buildernother = new NotificationCompat.Builder(mContext)
+                                                        .setSmallIcon(R.drawable.mc)
+                                                        .setContentTitle("Sikeres hozzáadás!")
+                                                        .setContentText("Jó netezést bátyya!")
+                                                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+                                                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
+                                                notificationManager.notify(MY_NOTIFICATION_ID, buildernother.build());
+                                                //TODO:: Befejezni ezt
+                                            }
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
