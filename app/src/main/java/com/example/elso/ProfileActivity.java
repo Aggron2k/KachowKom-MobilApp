@@ -89,20 +89,31 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
+    //külön szál: UPDATE
     private void updatePassword(final String newPassword) {
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null && !TextUtils.isEmpty(newPassword)) {
-            user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(ProfileActivity.this, "Jelszó frissítve!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(ProfileActivity.this, "Hiba lépett fel: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                    }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null && !TextUtils.isEmpty(newPassword)) {
+                    user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(ProfileActivity.this, "Jelszó frissítve!", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(ProfileActivity.this, "Hiba lépett fel: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                        }
+                    });
                 }
-            });
-        }
+            }
+        }).start();
     }
 
 

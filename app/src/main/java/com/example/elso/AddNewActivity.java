@@ -116,6 +116,7 @@ public class AddNewActivity extends AppCompatActivity {
 
                     Log.d("Activity", userId);
                     Item itemek = new Item(mname,mdesc,mprice,mrate,2131230980);
+                    //külön szál: CREATE
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {

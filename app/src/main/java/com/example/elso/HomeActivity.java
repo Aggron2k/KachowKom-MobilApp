@@ -124,25 +124,38 @@ public class HomeActivity extends AppCompatActivity {
     }
     private void queryData() {
         mItemsData.clear();
-        mItems.orderBy("ratedInfo").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+        //külön szál: READ
+        new Thread(new Runnable() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    for (QueryDocumentSnapshot document:
-                            task.getResult()) {
-                        mItemsData.add(new Item(
-                                document.getString("name"),
-                                document.getString("info"),
-                                document.getString("price"),
-                                document.getDouble("ratedInfo").floatValue(),
-                                document.getLong("imageResource").intValue()
-                        ));
+            public void run() {
+                mItems.orderBy("ratedInfo").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                mItemsData.add(new Item(
+                                        document.getString("name"),
+                                        document.getString("info"),
+                                        document.getString("price"),
+                                        document.getDouble("ratedInfo").floatValue(),
+                                        document.getLong("imageResource").intValue()
+                                ));
+                            }
+                            // Fő szálra való visszatérés
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
                     }
-                    mAdapter.notifyDataSetChanged();
-                }
+                });
             }
-        });
+        }).start();
     }
+
 
 
 

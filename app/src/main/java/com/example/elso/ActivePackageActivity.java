@@ -53,40 +53,50 @@ public class ActivePackageActivity extends AppCompatActivity {
     }
 
 
-
+    //SZÁL: READ
     private void loadActivePackages() {
-        String currentUserUID = FirebaseAuth.getInstance().getCurrentUser().getUid(); // Felhasználó UID lekérése
-        firestore.collection("userPackages")
-                .document(currentUserUID) // Dokumentum lekérése a felhasználó UID-ja alapján
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                // A dokumentum létezik, hozzáadhatod az adatokat az activePackagesList-hez
-                                activePackagesList.add(new Item(
-                                        document.getString("name"),
-                                        document.getString("info"),
-                                        document.getString("price"),
-                                        document.getDouble("ratedInfo").floatValue(),
-                                        document.getLong("imageResource").intValue()
-                                ));
-                                adapter.notifyDataSetChanged();
-                            } else {
-                                // A dokumentum nem létezik
-                                Toast.makeText(ActivePackageActivity.this, "Nem található csomag a felhasználóhoz.", Toast.LENGTH_SHORT).show();
-                                //Log.d(TAG, "Nem található csomag a felhasználóhoz.");
+        // Háttérszál indítása
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String currentUserUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                firestore.collection("userPackages")
+                        .document(currentUserUID)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                // A dokumentum létezik, hozzáadhatod az adatokat az activePackagesList-hez
+                                                activePackagesList.add(new Item(
+                                                        document.getString("name"),
+                                                        document.getString("info"),
+                                                        document.getString("price"),
+                                                        document.getDouble("ratedInfo").floatValue(),
+                                                        document.getLong("imageResource").intValue()
+                                                ));
+                                                adapter.notifyDataSetChanged();
+                                            } else {
+                                                // A dokumentum nem létezik
+                                                Toast.makeText(ActivePackageActivity.this, "Nem található csomag a felhasználóhoz.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            // Hiba történt a Firestore lekérdezés közben
+                                            Toast.makeText(ActivePackageActivity.this, "Hiba történt a csomagok betöltése közben.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                             }
-                        } else {
-                            // Hiba történt a Firestore lekérdezés közben
-                            Toast.makeText(ActivePackageActivity.this, "Hiba történt a csomagok betöltése közben.", Toast.LENGTH_SHORT).show();
-                            //Log.d(TAG, "Hiba történt a csomagok betöltése közben.", task.getException());
-                        }
-                    }
-                });
+                        });
+            }
+        }).start();
     }
+
 
 
 }

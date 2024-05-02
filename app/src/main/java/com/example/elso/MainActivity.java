@@ -49,24 +49,36 @@ public class MainActivity extends AppCompatActivity {
         String passwordStr = passwordET.getText().toString();
 
         Log.i(LOG_TAG, "Bejelentkezett: " + userEmailStr + "Jelszó: "+ passwordStr);
-        mAuth.signInWithEmailAndPassword(userEmailStr,passwordStr).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        //Külön szál:READ
+        mAuth.signInWithEmailAndPassword(userEmailStr, passwordStr).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    Log.d(LOG_TAG, "signInWithCredential:success");
-                    startHomeActivity();
-                }else{
-                    Log.w(LOG_TAG, "signInWithCredential:failure", task.getException());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle("Bejelentkezés sikertelen")
-                            .setMessage("Hibás E-mail vagy jelszó.")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {}
-                            })
-                            .show();
-                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (task.isSuccessful()) {
+                            Log.d(LOG_TAG, "signInWithCredential:success");
+                            startHomeActivity();
+                        } else {
+                            Log.w(LOG_TAG, "signInWithCredential:failure", task.getException());
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                    builder.setTitle("Bejelentkezés sikertelen")
+                                            .setMessage("Hibás E-mail vagy jelszó.")
+                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {}
+                                            })
+                                            .show();
+                                }
+                            });
+                        }
+                    }
+                }).start();
             }
         });
+
     }
     private void startHomeActivity(/*regiszter user data*/){
         Intent intent = new Intent(this, HomeActivity.class);

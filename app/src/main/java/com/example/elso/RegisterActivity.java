@@ -78,25 +78,37 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         Log.i(LOG_TAG, "Regisztrált: " + userNameStr + "  Email: "+ userEmailStr);
-
-        mAuth.createUserWithEmailAndPassword(userEmailStr, passwordStr).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        // Külön szál: CREATE
+        new Thread(new Runnable() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    Log.d(LOG_TAG,"USER CREATED!");
-                    startHomeActivity();
-                }else{
-                    Log.d(LOG_TAG, "USER CREATE ERROR!");
-                    String errorMessage = task.getException().getMessage();
-                    // AlertDialog megjelenítése a hibaüzenettel
-                    new AlertDialog.Builder(RegisterActivity.this)
-                            .setTitle("Regisztráció sikertelen")
-                            .setMessage(errorMessage)
-                            .setPositiveButton("OK", null)
-                            .show();
-                }
+            public void run() {
+                mAuth.createUserWithEmailAndPassword(userEmailStr, passwordStr).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // Fő szálra való visszatérés
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (task.isSuccessful()) {
+                                    Log.d(LOG_TAG,"USER CREATED!");
+                                    startHomeActivity();
+                                } else {
+                                    Log.d(LOG_TAG, "USER CREATE ERROR!");
+                                    String errorMessage = task.getException().getMessage();
+                                    // AlertDialog megjelenítése a hibaüzenettel
+                                    new AlertDialog.Builder(RegisterActivity.this)
+                                            .setTitle("Regisztráció sikertelen")
+                                            .setMessage(errorMessage)
+                                            .setPositiveButton("OK", null)
+                                            .show();
+                                }
+                            }
+                        });
+                    }
+                });
             }
-        });
+        }).start();
+
     }
 
     public void cancle(View view) {
