@@ -1,14 +1,11 @@
 package com.example.elso;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
-
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +36,8 @@ import java.util.ArrayList;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> implements Filterable {
 
-    private static final int MY_NOTIFICATION_ID = 0;
-
+    private static final String CHANNEL_ID = "my_channel_id";
+    private static final int MY_NOTIFICATION_ID = 12345;
 
     private ArrayList<Item> mItemsData;
     private ArrayList<Item> mItemsDataAll;
@@ -48,10 +45,21 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
     private int lastPos = -1;
     private FirebaseFirestore mFirestore;
 
-    ItemAdapter(Context context, ArrayList<Item> itemsData){
+    ItemAdapter(Context context, ArrayList<Item> itemsData) {
         this.mItemsData = itemsData;
         this.mItemsDataAll = itemsData;
         this.mContext = context;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "KachowKom Értesítés";
+            String description = "HALO! :O";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = mContext.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     @NonNull
@@ -60,22 +68,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
         return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false));
     }
 
-
     @Override
     public void onBindViewHolder(ItemAdapter.ViewHolder holder, int position) {
         Item currentItem = mItemsData.get(position);
-
-
         holder.bindTo(currentItem);
 
-
-        if(holder.getAdapterPosition() > lastPos){
+        if (holder.getAdapterPosition() > lastPos) {
             Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_in_row);
             holder.itemView.startAnimation(animation);
             lastPos = holder.getAdapterPosition();
         }
-
-
     }
 
     @Override
@@ -94,14 +96,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
             ArrayList<Item> filteredList = new ArrayList<>();
             FilterResults results = new FilterResults();
 
-            if (constraint == null || constraint.length() == 0){
+            if (constraint == null || constraint.length() == 0) {
                 results.count = mItemsDataAll.size();
                 results.values = mItemsDataAll;
-            }else{
+            } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                for (Item item : mItemsDataAll){
-                    if (item.getName().toLowerCase().contains(filterPattern)){
+                for (Item item : mItemsDataAll) {
+                    if (item.getName().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }
@@ -130,9 +132,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            // Firestore objektum inicializálása
-            mFirestore = FirebaseFirestore.getInstance(); // Firestore objektum inicializálása
+            mFirestore = FirebaseFirestore.getInstance();
 
             mTitleText = itemView.findViewById(R.id.itemTitle);
             mInfoText = itemView.findViewById(R.id.subTitle);
@@ -160,22 +160,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            //Toast.makeText(mContext, "Csomag sikeresen kiválasztva!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(mContext, "Csomag sikeresen kiválasztva!", Toast.LENGTH_SHORT).show();
 
                                             if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-                                                Toast.makeText(mContext, "Nem volt engeély", Toast.LENGTH_SHORT).show();
-
-                                                ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.INTERNET}, MY_NOTIFICATION_ID);
                                             } else {
-                                                Toast.makeText(mContext, "Van engeély", Toast.LENGTH_SHORT).show();
-                                                NotificationCompat.Builder buildernother = new NotificationCompat.Builder(mContext)
+                                                NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, CHANNEL_ID)
                                                         .setSmallIcon(R.drawable.mc)
                                                         .setContentTitle("Sikeres hozzáadás!")
                                                         .setContentText("Jó netezést bátyya!")
-                                                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+                                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                                                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
-                                                notificationManager.notify(MY_NOTIFICATION_ID, buildernother.build());
-                                                //TODO:: Befejezni ezt
+                                                notificationManager.notify(MY_NOTIFICATION_ID, builder.build());
                                             }
                                         }
                                     })
@@ -201,7 +196,4 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
             Glide.with(mContext).load(currentItem.getImageResource()).into(mItemImage);
         }
     }
-
-};
-
-
+}
