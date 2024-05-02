@@ -1,6 +1,7 @@
 package com.example.elso;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,31 +55,36 @@ public class ActivePackageActivity extends AppCompatActivity {
 
 
     private void loadActivePackages() {
+        String currentUserUID = FirebaseAuth.getInstance().getCurrentUser().getUid(); // Felhasználó UID lekérése
         firestore.collection("userPackages")
-                //.where(currentUser)
-                //TODO: ITT WHERE?
+                .document(currentUserUID) // Dokumentum lekérése a felhasználó UID-ja alapján
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot doc : task.getResult()){
-                                activePackagesList
-                                        .add(new Item(
-                                                doc.getString("name"),
-                                                doc.getString("info"),
-                                                doc.getString("price"),
-                                                doc.getDouble("ratedInfo").floatValue(),
-                                                doc.getLong("imageResource").intValue()
-                                        ));
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                // A dokumentum létezik, hozzáadhatod az adatokat az activePackagesList-hez
+                                activePackagesList.add(new Item(
+                                        document.getString("name"),
+                                        document.getString("info"),
+                                        document.getString("price"),
+                                        document.getDouble("ratedInfo").floatValue(),
+                                        document.getLong("imageResource").intValue()
+                                ));
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                // A dokumentum nem létezik
+                                //Log.d(TAG, "Nem található csomag a felhasználóhoz.");
                             }
-                            adapter.notifyDataSetChanged();
                         } else {
-                            Toast.makeText(ActivePackageActivity.this, "Hiba", Toast.LENGTH_SHORT).show();
+                            // Hiba történt a Firestore lekérdezés közben
+                            //Log.d(TAG, "Hiba történt a csomagok betöltése közben.", task.getException());
                         }
                     }
                 });
-
     }
+
 
 }
