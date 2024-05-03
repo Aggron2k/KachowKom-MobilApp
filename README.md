@@ -1,3 +1,4 @@
+#Horváth Krisztián Sándor (G90HGI)
 Amit nem tudd:
  - Nem reszponzív,
  - LifecycleHook-ok nem túl hasznosak
