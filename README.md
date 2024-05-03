@@ -1,5 +1,6 @@
-#Horváth Krisztián Sándor (G90HGI)
-Amit nem tudd:
+#Horváth Krisztián Sándor
+(G90HGI)
+ - Amit nem tudd:
  - Nem reszponzív,
  - LifecycleHook-ok nem túl hasznosak
  - notifaction ilyenek nincsenek Toastot használtam
